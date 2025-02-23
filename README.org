@@ -1,0 +1,48 @@
+#+TITLE: README
+#+AUTHOR: mitchell
+
+* TT (Truth Table)
+
+This program generates truth table for propositional logic formulas
+
+** Syntax
+| Operation | Symbol   |
+|-----------+----------|
+| AND       | &        |
+| OR        | \vert        |
+| NOT       | ~        |
+| XOR       | ^        |
+| IMPLY     | >        |
+| IFF       | =        |
+| VARIABLE  | [a-zA-z] |
+
+** Usage
+
+- Build the SRC and runs it:
+
+~gcc tt.c -o tt && ./tt~
+
+- Input the formula and get the results:
+
+#+BEGIN_SRC sh
+Input the Boolean Expression: A&B|C^B
+R = A&B|C^B
+| A | B | C | R |
+| 0 | 0 | 0 | 0 |
+| 0 | 0 | 1 | 1 |
+| 0 | 1 | 0 | 1 |
+| 0 | 1 | 1 | 0 |
+| 1 | 0 | 0 | 0 |
+| 1 | 0 | 1 | 1 |
+| 1 | 1 | 0 | 1 |
+| 1 | 1 | 1 | 1 |
+
+│   ├---VAR('B')
+├---XOR(^)
+│   └---VAR('C')
+OR(|)
+│   ├---VAR('B')
+└---AND(&)
+│   └---VAR('A')
+
+#+END_SRC
