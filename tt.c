@@ -90,18 +90,53 @@ Token *tokenize(char *str)
     int pos = 0;
     while (*str) {
 	switch (*str) {
-	case ' ': break;
-	case '&': t[pos++] = (Token){OP_AND, 0}; break;
-	case '|': t[pos++] = (Token){OP_OR, 0}; break;
-	case '^': t[pos++] = (Token){OP_XOR, 0}; break;
-	case '~': t[pos++] = (Token){OP_NOT, 0}; break;
-	case '(': t[pos++] = (Token){OP_LPAR, 0}; break;
-	case ')': t[pos++] = (Token){OP_RPAR, 0}; break;
-	case '>': t[pos++] = (Token){OP_IMPLY, 0}; break;
-	case '=': t[pos++] = (Token){OP_EQUAL, 0}; break;
+	case ' ':
+	    break;
+	case '&':
+	    t[pos++] = (Token) {
+		OP_AND, 0
+	    };
+	    break;
+	case '|':
+	    t[pos++] = (Token) {
+		OP_OR, 0
+	    };
+	    break;
+	case '^':
+	    t[pos++] = (Token) {
+		OP_XOR, 0
+	    };
+	    break;
+	case '~':
+	    t[pos++] = (Token) {
+		OP_NOT, 0
+	    };
+	    break;
+	case '(':
+	    t[pos++] = (Token) {
+		OP_LPAR, 0
+	    };
+	    break;
+	case ')':
+	    t[pos++] = (Token) {
+		OP_RPAR, 0
+	    };
+	    break;
+	case '>':
+	    t[pos++] = (Token) {
+		OP_IMPLY, 0
+	    };
+	    break;
+	case '=':
+	    t[pos++] = (Token) {
+		OP_EQUAL, 0
+	    };
+	    break;
 	default:
 	    if (isalpha(*str)) {
-		t[pos++] = (Token){OP_VAR, *str};
+		t[pos++] = (Token) {
+		    OP_VAR, *str
+		};
 	    } else {
 		fprintf(stderr, "Illegal character %c, expect a Token\n", *str);
 		exit(1);
@@ -109,27 +144,39 @@ Token *tokenize(char *str)
 	}
 	str++;
     }
-    t[pos++] = (Token){OP_END, 0};
+    t[pos++] = (Token) {
+	OP_END, 0
+    };
     return t;
 }
 
 ASTNode *parexp(int pre);
 ASTNode *parse();
 
-int prec(Op op) {
+int prec(Op op)
+{
     switch (op) {
-    case OP_NOT: return 6;
-    case OP_AND: return 5;
-    case OP_XOR: return 4;
-    case OP_OR:  return 3;
-    case OP_IMPLY:  return 2;
-    case OP_EQUAL: return 1;
-    case OP_LPAR: return -1;
-    default: return -1;
+    case OP_NOT:
+	return 6;
+    case OP_AND:
+	return 5;
+    case OP_XOR:
+	return 4;
+    case OP_OR:
+	return 3;
+    case OP_IMPLY:
+	return 2;
+    case OP_EQUAL:
+	return 1;
+    case OP_LPAR:
+	return -1;
+    default:
+	return -1;
     }
 }
 
-ASTNode *parexp(int m_prec) {
+ASTNode *parexp(int m_prec)
+{
     ASTNode *left = parse();
 
     while (1) {
@@ -198,13 +245,20 @@ int evaluate(ASTNode *node, int *values, char *vars, int count)
     int right = node->right ? evaluate(node->right, values, vars, count) : 0;
 
     switch (node->token.op) {
-    case OP_AND: return left && right;
-    case OP_OR: return left || right;
-    case OP_NOT: return !left;
-    case OP_XOR: return left ^ right;
-    case OP_IMPLY: return !left || right;
-    case OP_EQUAL: return left == right;
-    default: return -1;
+    case OP_AND:
+	return left && right;
+    case OP_OR:
+	return left || right;
+    case OP_NOT:
+	return !left;
+    case OP_XOR:
+	return left ^ right;
+    case OP_IMPLY:
+	return !left || right;
+    case OP_EQUAL:
+	return left == right;
+    default:
+	return -1;
     }
 }
 
@@ -239,29 +293,29 @@ void print_ast(ASTNode *node, int depth, int left)
 	printf("%s---", left ? "└" : "├");
 
     switch (node->token.op) {
-	case OP_VAR:
-	    printf("VAR('%c')\n", node->token.var);
-	    break;
-	case OP_AND:
-	    printf("AND(&)\n");
-	    break;
-	case OP_OR:
-	    printf("OR(|)\n");
-	    break;
-	case OP_XOR:
-	    printf("XOR(^)\n");
-	    break;
-	case OP_NOT:
-	    printf("NOT(~)\n");
-	    break;
-	case OP_IMPLY:
-	    printf("IMPLY(>)\n");
-	    break;
-	case OP_EQUAL:
-	    printf("EQUAL(=)\n");
-	    break;
-	default:
-	    printf("UNKNOWN\n");
+    case OP_VAR:
+	printf("VAR('%c')\n", node->token.var);
+	break;
+    case OP_AND:
+	printf("AND(&)\n");
+	break;
+    case OP_OR:
+	printf("OR(|)\n");
+	break;
+    case OP_XOR:
+	printf("XOR(^)\n");
+	break;
+    case OP_NOT:
+	printf("NOT(~)\n");
+	break;
+    case OP_IMPLY:
+	printf("IMPLY(>)\n");
+	break;
+    case OP_EQUAL:
+	printf("EQUAL(=)\n");
+	break;
+    default:
+	printf("UNKNOWN\n");
     }
 
     print_ast(node->left, depth + 1, 1);
